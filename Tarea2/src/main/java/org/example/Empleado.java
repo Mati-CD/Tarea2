@@ -29,11 +29,7 @@ public class Empleado {
     public String getCorreo() {
         return correo;
     }
-
-    public Departamento getDepartamento() {
-        return departamento;
-    }
-
+    
     // Setters
     public void setId(String id) {
         this.id = id;
@@ -50,11 +46,7 @@ public class Empleado {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
+    
     @Override
     public String toString() {
         return "Empleado{" +
@@ -62,7 +54,6 @@ public class Empleado {
                 ", apellidos='" + apellidos + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", correo='" + correo + '\'' +
-                ", departamento=" + (departamento != null ? departamento.getNombre() : "null") +
                 '}';
     }
 
