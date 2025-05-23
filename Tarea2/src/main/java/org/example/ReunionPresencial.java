@@ -7,8 +7,7 @@ import java.util.Date;
 public class ReunionPresencial extends Reunion {
     private String sala;
 
-    public ReunionPresencial(Empleado organizador,TipoReunion tipo, Date fecha,
-                             LocalDateTime horaPrevista, Duration duracionPrevista, String sala) {
+    public ReunionPresencial(Empleado organizador,TipoReunion tipo, Date fecha,LocalDateTime horaPrevista, Duration duracionPrevista, String sala) {
         super(organizador, tipo, fecha, horaPrevista, duracionPrevista);
         this.sala = sala;
     }
