@@ -1,13 +1,13 @@
 package org.example;
 
-public enum TipoReunion {
+public enum tipoReunion {
     TECNICA(1),
     MARKETING(2),
     OTRO(3);
 
     private final int queTipo;
 
-    TipoReunion(int queTipo) {
+    tipoReunion(int queTipo) {
         this.queTipo = queTipo;
     }
 
