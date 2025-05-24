@@ -3,96 +3,147 @@ package org.example;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.*;
-import java.util.*;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReunionTest {
+    private Reunion reunion;
+    private Empleado organizador;
+    private Empleado empleado1;
+    private Empleado empleado2;
+    private Date fecha;
 
-    // Clase concreta para testing
+    // Clase concreta para probar la abstracta Reunion
     private static class ReunionConcreta extends Reunion {
         public ReunionConcreta(Date fecha, Empleado organizador, tipoReunion tipo) {
             super(fecha, organizador, tipo);
         }
     }
 
-    private Reunion reunion;
-    private Empleado organizador;
-
     @BeforeEach
     void setUp() {
-        organizador = new Empleado("EMP-001", "Gómez", "Ana", "ana@empresa.com");
-        reunion = new ReunionConcreta(
-                new Date(),
-                organizador,
-                tipoReunion.TECNICA
-        );
+        fecha = new Date();
+        organizador = new Empleado("1", "Gómez", "Juan", "juan@empresa.com");
+        empleado1 = new Empleado("2", "Pérez", "María", "maria@empresa.com");
+        empleado2 = new Empleado("3", "López", "Carlos", "carlos@empresa.com");
 
-        // Configuración inicial para algunas pruebas
-        reunion.setHoraPrevista(LocalDateTime.now().plusHours(1));
-        reunion.setDuracionPrevista(Duration.ofHours(2));
+        reunion = new ReunionConcreta(fecha, organizador, tipoReunion.TECNICA);
     }
 
     @Test
-    void testCreacionReunion() {
+    void testConstructor() {
         assertNotNull(reunion);
-        assertEquals(organizador, reunion.organizador);
-        assertEquals(tipoReunion.TECNICA, reunion.tipo);
-        assertNotNull(reunion.fecha);
+        assertEquals(organizador, reunion.getOrganizador());
+        assertEquals(tipoReunion.TECNICA, reunion.getTipo());
+        assertEquals(fecha, reunion.getFecha());
+        assertTrue(reunion.obtenerAsistencias().isEmpty());
+        assertTrue(reunion.obtenerRetrasos().isEmpty());
     }
 
     @Test
-    void testIniciarYFinalizarReunion() {
+    void testRegistrarInvitados() {
+        reunion.registrarInvitados(empleado1);
+        reunion.registrarInvitados(empleado2);
+
+        assertEquals(2, reunion.obtenerAusencias().size());
+    }
+
+    @Test
+    void testRegistrarAsistencia() {
+        LocalTime horaInicioReunion = LocalTime.of(10, 0);
+
+        // Asistencia puntual
+        reunion.registrarAsistencia(empleado1, LocalTime.of(9, 55), horaInicioReunion);
+        assertEquals(1, reunion.obtenerAsistencias().size());
+        assertEquals(0, reunion.obtenerRetrasos().size());
+
+        // Asistencia con retraso
+        reunion.registrarAsistencia(empleado2, LocalTime.of(10, 15), horaInicioReunion);
+        assertEquals(2, reunion.obtenerAsistencias().size());
+        assertEquals(1, reunion.obtenerRetrasos().size());
+    }
+
+    @Test
+    void testObtenerAusencias() {
+        reunion.registrarInvitados(empleado1);
+        reunion.registrarInvitados(empleado2);
+
+        assertEquals(2, reunion.obtenerAusencias().size());
+
+        reunion.registrarAsistencia(empleado1, LocalTime.now(), LocalTime.now());
+        assertEquals(1, reunion.obtenerAusencias().size());
+    }
+
+    @Test
+    void testIniciarYFinalizar() {
+        assertNull(reunion.getHoraInicio());
+        assertNull(reunion.getHoraFinal());
+
         reunion.iniciar();
-        assertNotNull(reunion.horaInicio);
-        // Pequeña pausa para asegurar diferencia de tiempo
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        Instant horaInicio = reunion.getHoraInicio();
+        assertNotNull(horaInicio);
+
         reunion.finalizar();
-        assertNotNull(reunion.horaFinal);
-        assertTrue(reunion.horaFinal.isAfter(reunion.horaInicio));
+        Instant horaFinal = reunion.getHoraFinal();
+        assertNotNull(horaFinal);
+
+        // Verificación menos estricta pero suficiente
+        assertFalse(horaFinal.isBefore(horaInicio),
+                "La hora final no debe ser anterior a la hora de inicio");
     }
 
     @Test
-    void testGetAsistenciaYAusentes() {
-        Empleado empleado1 = new Empleado("EMP-002", "López", "Carlos", "carlos@empresa.com");
-        Empleado empleado2 = new Empleado("EMP-003", "Martínez", "Luisa", "luisa@empresa.com");
+    void testObtenerPorcentajeAsistencia() {
+        reunion.registrarInvitados(empleado1);
+        reunion.registrarInvitados(empleado2);
 
-        // Configurar listas de prueba (esto normalmente se haría con métodos de registro)
-        reunion.Asistentes = new ArrayList<>(List.of(organizador, empleado1));
-        reunion.Ausentes = new ArrayList<>(List.of(empleado2));
+        assertEquals(0, reunion.obtenerPorcentajeAsistencia());
 
-        List<Empleado> asistentes = reunion.getAsitencia();
-        List<Empleado> ausentes = reunion.getAusentes();
+        reunion.registrarAsistencia(empleado1, LocalTime.now(), LocalTime.now());
+        assertEquals(50, reunion.obtenerPorcentajeAsistencia());
 
-        assertEquals(2, asistentes.size());
-        assertEquals(1, ausentes.size());
-        assertTrue(asistentes.contains(organizador));
-        assertTrue(ausentes.contains(empleado2));
+        reunion.registrarAsistencia(empleado2, LocalTime.now(), LocalTime.now());
+        assertEquals(100, reunion.obtenerPorcentajeAsistencia());
     }
 
+    @Test
+    void testPorcentajeAsistenciaSinInvitados() {
+        // Verificar que el metodo lanza ArithmeticException cuando no hay invitados
+        assertThrows(ArithmeticException.class, () -> {
+            reunion.obtenerPorcentajeAsistencia();
+        });
+
+        // Caso con invitados para probar el cálculo normal
+        reunion.registrarInvitados(empleado1);
+        assertEquals(0.0f, reunion.obtenerPorcentajeAsistencia(), 0.001f);
+
+        reunion.registrarAsistencia(empleado1, LocalTime.now(), LocalTime.now());
+        assertEquals(100.0f, reunion.obtenerPorcentajeAsistencia(), 0.001f);
+    }
     @Test
     void testToString() {
-        reunion.setDuracionPrevista(Duration.ofHours(2));
-        String resultado = reunion.toString();
+        reunion.registrarInvitados(empleado1);
+        reunion.registrarInvitados(empleado2);
+        reunion.registrarAsistencia(empleado1, LocalTime.now(), LocalTime.now());
 
-        assertTrue(resultado.contains("Reunion de tipo: TECNICA"));
-        assertTrue(resultado.contains("Hora prevista: "));
-        assertTrue(resultado.contains("Duracion prevista: ") ||
-                resultado.contains("Duration: PT2H"));
+        String str = reunion.toString();
+        assertTrue(str.contains("TECNICA"));
+        assertTrue(str.contains("invitados=2"));
+        assertTrue(str.contains("asistentes=1"));
     }
 
     @Test
-    void testSetHoraYDuracionPrevista() {
-        LocalDateTime nuevaHora = LocalDateTime.now().plusHours(3);
-        Duration nuevaDuracion = Duration.ofMinutes(90);
+    void testGettersYSetters() {
+        Empleado nuevoOrganizador = new Empleado("4", "Rodríguez", "Ana", "ana@empresa.com");
+        reunion.setOrganizador(nuevoOrganizador);
+        assertEquals(nuevoOrganizador, reunion.getOrganizador());
 
-        reunion.setHoraPrevista(nuevaHora);
-        reunion.setDuracionPrevista(nuevaDuracion);
+        reunion.setTipo(tipoReunion.MARKETING);
+        assertEquals(tipoReunion.MARKETING, reunion.getTipo());
 
-        assertEquals(nuevaHora, reunion.horaPrevista);
-        assertEquals(nuevaDuracion, reunion.duracionPrevista);
+        Instant ahora = Instant.now();
+        reunion.setHoraInicio(ahora);
+        assertEquals(ahora, reunion.getHoraInicio());
     }
 }

@@ -13,11 +13,18 @@ public class Invitacion {
         invitado.invitar();
     }
 
-
+    // Getters
     public Instant getHora() {
         return hora;
     }
+
+    // Setters
     public void setHora(Instant hora) {
         this.hora = hora;
+    }
+
+    @Override
+    public String toString() {
+        return "Hora invitación: " + hora;
     }
 }

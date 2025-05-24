@@ -14,5 +14,14 @@ public class Retraso extends Asistencia {
     public Instant getHoraRetraso() {
         return hora;
     }
+
+    public void setHoraRetraso(Instant hora) {
+        this.hora = hora;
+    }
+
+    @Override
+    public String toString() {
+        return "Hora (con retraso): " + hora ;
+    }
 }
 

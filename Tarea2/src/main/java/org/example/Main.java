@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Main {
@@ -35,10 +36,6 @@ public class Main {
 
         LocalTime horaInicio = LocalTime.of(10, 0);
 
-        reunion.registrarInvitados(e1);
-        reunion.registrarInvitados(e2);
-        reunion.registrarInvitados(e3);
-
         reunion.registrarAsistencia(e1, LocalTime.of(9,55), horaInicio);
         reunion.registrarAsistencia(e2, LocalTime.of(10,5), horaInicio);
 
@@ -47,9 +44,8 @@ public class Main {
         System.out.println("LLego tarde: " + reunion.obtenerRetrasos());
         System.out.println("No llego: " + reunion.obtenerAusencias());
 
-
-
-
+        System.out.println("Total asistencia: " + reunion.obtenerTotalAsistencia());
+        System.out.println("Porcentaje asistencia: " + reunion.obtenerPorcentajeAsistencia());
     }
 
 }
