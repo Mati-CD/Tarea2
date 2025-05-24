@@ -28,7 +28,7 @@ class ReunionTest {
         );
 
         // Configuración inicial para algunas pruebas
-        reunion.setHoraPrevista(LocalDateTime.now().plusHours(1));
+        reunion.setHoraPrevista(Instant.now().plus(Duration.ofHours(1)));
         reunion.setDuracionPrevista(Duration.ofHours(2));
     }
 
@@ -56,16 +56,20 @@ class ReunionTest {
     }
 
     @Test
-    void testGetAsistenciaYAusentes() {
+    void testObtenerAsistenciasYAusencias() {
         Empleado empleado1 = new Empleado("EMP-002", "López", "Carlos", "carlos@empresa.com");
         Empleado empleado2 = new Empleado("EMP-003", "Martínez", "Luisa", "luisa@empresa.com");
 
-        // Configurar listas de prueba (esto normalmente se haría con métodos de registro)
-        reunion.Asistentes = new ArrayList<>(List.of(organizador, empleado1));
-        reunion.Ausentes = new ArrayList<>(List.of(empleado2));
+        // Registrar invitados
+        reunion.registrarInvitados(empleado1);
+        reunion.registrarInvitados(empleado2);
 
-        List<Empleado> asistentes = reunion.getAsitencia();
-        List<Empleado> ausentes = reunion.getAusentes();
+        // Registrar asistencia (simulada)
+        reunion.Asistentes.add(organizador);
+        reunion.Asistentes.add(empleado1);
+
+        List<Empleado> asistentes = reunion.obtenerAsistencias();
+        List<Empleado> ausentes = reunion.obtenerAusencias();
 
         assertEquals(2, asistentes.size());
         assertEquals(1, ausentes.size());
@@ -80,13 +84,12 @@ class ReunionTest {
 
         assertTrue(resultado.contains("Reunion de tipo: TECNICA"));
         assertTrue(resultado.contains("Hora prevista: "));
-        assertTrue(resultado.contains("Duracion prevista: ") ||
-                resultado.contains("Duration: PT2H"));
+        assertTrue(resultado.contains("Duracion prevista: PT2H"));
     }
 
     @Test
     void testSetHoraYDuracionPrevista() {
-        LocalDateTime nuevaHora = LocalDateTime.now().plusHours(3);
+        Instant nuevaHora = Instant.now().plus(Duration.ofHours(3));
         Duration nuevaDuracion = Duration.ofMinutes(90);
 
         reunion.setHoraPrevista(nuevaHora);
