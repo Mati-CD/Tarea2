@@ -18,4 +18,15 @@ public class Asistencia {
             tarde=false;
         }
     }
+
+    public boolean getTipoAsistencia() {
+        return tarde;
+    }
+    public boolean getPresente() {
+        return presente;
+    }
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
 }
