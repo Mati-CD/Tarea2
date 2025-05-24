@@ -5,8 +5,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Clase de pruebas unitarias para la clase Nota.
+ * Se verifica el correcto funcionamiento del constructor, los métodos de acceso,
+ * el método toString, y el comportamiento ante entradas inválidas.
+ */
 class NotaTest {
 
+    /**
+     * Verifica que una Nota se crea correctamente con contenido y que se asigna una fecha de creación reciente.
+     */
     @Test
     void testCreacionNota() {
         // Arrange
@@ -24,6 +32,9 @@ class NotaTest {
                 "La fecha de creación debería ser aproximadamente ahora");
     }
 
+    /**
+     * Prueba que el método getContenido devuelve el contenido correcto.
+     */
     @Test
     void testGetContenido() {
         // Arrange
@@ -34,6 +45,9 @@ class NotaTest {
         assertEquals(contenido, nota.getContenido(), "El contenido obtenido no coincide con el esperado");
     }
 
+    /**
+     * Verifica que getFechaCreacion retorna una fecha válida cercana al momento de creación del objeto.
+     */
     @Test
     void testGetFechaCreacion() {
         // Arrange
@@ -43,11 +57,15 @@ class NotaTest {
         // Act y Assert
         LocalDateTime fechaCreacion = nota.getFechaCreacion();
         assertNotNull(fechaCreacion, "La fecha de creación no debería ser nula");
-        assertFalse(fechaCreacion.isBefore(antes), "La fecha de creación no debería ser anterior a la creación de la nota");
+        assertFalse(fechaCreacion.isBefore(antes),
+                "La fecha de creación no debería ser anterior a la creación de la nota");
         assertTrue(fechaCreacion.isBefore(LocalDateTime.now().plusSeconds(1)),
                 "La fecha de creación no debería ser mucho después del momento actual");
     }
 
+    /**
+     * Prueba que el método toString tiene el formato correcto, incluyendo la fecha y el contenido.
+     */
     @Test
     void testToString() {
         // Arrange
@@ -63,6 +81,9 @@ class NotaTest {
         assertTrue(resultado.endsWith("] " + contenido), "El formato toString no coincide con el esperado");
     }
 
+    /**
+     * Verifica que se puede crear una nota con contenido vacío y que se asigna una fecha de creación.
+     */
     @Test
     void testNotaVacia() {
         // Arrange y Act
@@ -73,6 +94,9 @@ class NotaTest {
         assertNotNull(nota.getFechaCreacion(), "La fecha de creación no debería ser nula incluso con contenido vacío");
     }
 
+    /**
+     * Verifica que el constructor lanza una NullPointerException al pasar contenido nulo.
+     */
     @Test
     void testNotaConNull() {
         // Act y Assert
@@ -80,6 +104,9 @@ class NotaTest {
                 "Debería lanzar NullPointerException con contenido nulo");
     }
 
+    /**
+     * Prueba que el contenido largo se guarda correctamente y que el método toString lo incluye adecuadamente.
+     */
     @Test
     void testNotaConFormatoLargo() {
         // Arrange
