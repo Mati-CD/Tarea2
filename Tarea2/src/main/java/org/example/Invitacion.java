@@ -13,7 +13,6 @@ public class Invitacion {
         invitado.invitar();
     }
 
-
     public Instant getHora() {
         return hora;
     }

@@ -79,13 +79,21 @@ public abstract class Reunion {
         this.horaFinal = Instant.now();
     }
 
+    public int obtenerTotalAsistencia() {
+        return Asistentes.size();
+    }
+
+    public float obtenerPorcentajeAsistencia() {
+        return Asistentes.size() * 100 / Invitados.size();
+
+    }
+
     public float calcularTiempoReal(){
         Duration duracion = Duration.between(horaInicio,horaFinal);
         float minutosTotales = duracion.toMinutes();
         float horas = minutosTotales/60;
         return(horas);
     }
-
 
     public String toString(){
         return "Reunion de tipo: " + tipo + "\n" +

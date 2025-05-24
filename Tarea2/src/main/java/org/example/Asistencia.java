@@ -28,5 +28,4 @@ public class Asistencia {
     public Empleado getEmpleado() {
         return empleado;
     }
-
 }
