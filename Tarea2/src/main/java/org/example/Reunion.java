@@ -64,14 +64,6 @@ public abstract class Reunion {
         return new ArrayList<Empleado>(Retrasos);
     }
 
-    public void setHoraPrevista(Instant horaPrevista){
-        this.horaPrevista = horaPrevista;
-    }
-
-    public void setDuracionPrevista(Duration duracionPrevista){
-        this.duracionPrevista = duracionPrevista;
-    }
-
     public void iniciar(){
         this.horaInicio = Instant.now();
     }
@@ -95,10 +87,73 @@ public abstract class Reunion {
         return(horas);
     }
 
-    public String toString(){
-        return "Reunion de tipo: " + tipo + "\n" +
-                "Fecha: " + fecha + "\n" +
-                "Hora prevista: " + horaPrevista + "\n" +
-                "Duracion prevista: " + duracionPrevista + "\n";
+    // Getters
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public Instant getHoraInicio() {
+        return horaInicio;
+    }
+
+    public Instant getHoraFinal() {
+        return horaFinal;
+    }
+
+    public Instant getHoraPrevista() {
+        return horaPrevista;
+    }
+
+    public Duration getDuracionPrevista() {
+        return duracionPrevista;
+    }
+
+    public Empleado getOrganizador() {
+        return organizador;
+    }
+
+    public tipoReunion getTipo() {
+        return tipo;
+    }
+
+    // Setters
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setHoraInicio(Instant horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public void setHoraFinal(Instant horaFinal) {
+        this.horaFinal = horaFinal;
+    }
+
+    public void setOrganizador(Empleado organizador) {
+        this.organizador = organizador;
+    }
+
+    public void setTipo(tipoReunion tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setHoraPrevista(Instant horaPrevista){
+        this.horaPrevista = horaPrevista;
+    }
+
+    public void setDuracionPrevista(Duration duracionPrevista){
+        this.duracionPrevista = duracionPrevista;
+    }
+
+    @Override
+    public String toString() {
+        return "Reunion{" +
+                "tipo=" + tipo +
+                ", fecha=" + fecha +
+                ", organizador=" + organizador.getNombre() +
+                ", invitados=" + Invitados.size() +
+                ", asistentes=" + Asistentes.size() +
+                ", retrasos=" + Retrasos.size() +
+                "}";
     }
 }

@@ -64,7 +64,7 @@ class ReunionTest {
         reunion.Asistentes = new ArrayList<>(List.of(organizador, empleado1));
         reunion.Ausentes = new ArrayList<>(List.of(empleado2));
 
-        List<Empleado> asistentes = reunion.getAsitencia();
+        List<Empleado> asistentes = reunion.getAsistencia();
         List<Empleado> ausentes = reunion.getAusentes();
 
         assertEquals(2, asistentes.size());

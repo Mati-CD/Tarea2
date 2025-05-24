@@ -14,4 +14,9 @@ public enum tipoReunion {
     public int getTipo(){
         return queTipo;
     }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }
