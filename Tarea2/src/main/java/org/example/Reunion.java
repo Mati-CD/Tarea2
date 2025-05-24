@@ -13,10 +13,13 @@ public abstract class Reunion {
     protected Duration duracionPrevista;
     protected ArrayList<Empleado> Asistentes;
     protected ArrayList<Empleado> Ausentes;
+    protected Empleado organizador;
+    protected tipoReunion tipo;
 
-    protected Reunion(Date fecha, Duration duracionPrevista){
+    protected Reunion(Date fecha,Empleado organizador, tipoReunion tipo){
         this.fecha = fecha;
-        this.duracionPrevista = duracionPrevista;
+        this.organizador = organizador;
+        this.tipo = tipo;
     }
 
     public ArrayList<Empleado> getAsitencia(){
@@ -25,6 +28,13 @@ public abstract class Reunion {
 
     public ArrayList<Empleado> getAusentes(){
         return new ArrayList<Empleado>(Ausentes);
+    }
+    public void setHoraPrevista(Instant horaPrevista){
+        this.horaPrevista = horaPrevista;
+    }
+
+    public void setDuracionPrevista(Duration duracionPrevista){
+        this.duracionPrevista = duracionPrevista;
     }
 
 
@@ -45,7 +55,7 @@ public abstract class Reunion {
 
     public String toString(){
         return "Reunion de tipo: " + tipo + "\n" +
-               "Fecha: " + fecha + "\n" +
+                "Fecha: " + fecha + "\n" +
                 "Hora prevista: " + horaPrevista + "\n" +
                 "Duracion prevista: " + duracionPrevista + "\n";
     }
