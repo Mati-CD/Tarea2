@@ -1,92 +1,126 @@
 package org.example;
 
-import java.util.ArrayList;
+import java.time.LocalTime;
 
 /**
- * Esta clase representa un departamento dentro de la empresa.
- * Cada departamento tiene un nombre y una lista de empleados asociados.
+ * Esta clase representa la asistencia de un empleado a una reunión.
+ * Guarda si asistió, si llegó tarde y la hora exacta en que llegó.
  */
-public class Departamento {
-    private String nombre;
-    private ArrayList<Empleado> empleados;
+public class Asistencia {
+    private Empleado empleado;
+    private boolean presente;
+    private boolean tarde;
+    private LocalTime llegada;
 
     /**
-     * Constructor del departamento.
-     * Se inicializa con un nombre y una lista vacía de empleados.
+     * Constructor de la clase Asistencia.
+     * Se le pasa el empleado, la hora a la que llegó y la hora en que partía la reunión.
+     * Si llegó después de que partía, se marca como tarde.
      *
-     * @param nombre nombre del departamento.
+     * @param empleado el empleado al que se le registra la asistencia.
+     * @param horallegada la hora exacta en que llegó.
+     * @param horaInicioReunion la hora oficial de inicio de la reunión.
      */
-    public Departamento(String nombre) {
-        empleados = new ArrayList<>();
-        this.nombre = nombre;
+    public Asistencia(Empleado empleado, LocalTime horallegada , LocalTime horaInicioReunion){
+        this.empleado = empleado;
+        presente = true;
+        llegada = horallegada;
+        tarde = horallegada.isAfter(horaInicioReunion);
     }
 
     /**
-     * Agrega un empleado al departamento.
+     * Retorna si el empleado llegó tarde o no.
      *
-     * @param empleado el empleado que se quiere agregar.
+     * @return true si llegó tarde, false si llegó puntual.
      */
-    public void add(Empleado empleado) {
-        empleados.add(empleado);
+    public boolean getTipoAsistencia() {
+        return tarde;
     }
 
     /**
-     * Retorna cuántos empleados hay en el departamento.
+     * Retorna si el empleado estuvo presente.
      *
-     * @return número de empleados registrados.
+     * @return true si asistió, false si estuvo ausente.
      */
-    public int obtenerCantidadEmpleados() {
-        return empleados.size();
+    public boolean getPresente() {
+        return presente;
     }
 
     // Getters
 
     /**
-     * Devuelve el nombre del departamento.
+     * Devuelve el empleado asociado a esta asistencia.
      *
-     * @return nombre del departamento.
+     * @return el objeto Empleado.
      */
-    public String getNombre() {
-        return nombre;
+    public Empleado getEmpleado() {
+        return empleado;
     }
 
     /**
-     * Devuelve una copia de la lista de empleados del departamento.
+     * Devuelve la hora en que llegó el empleado.
      *
-     * @return lista de empleados.
+     * @return hora de llegada.
      */
-    public ArrayList<Empleado> getEmpleados() {
-        return new ArrayList<>(empleados);
+    public LocalTime getLlegada() {
+        return llegada;
     }
 
     // Setters
 
     /**
-     * Cambia el nombre del departamento.
+     * Permite cambiar el empleado de esta asistencia.
      *
-     * @param nombre nuevo nombre.
+     * @param empleado nuevo empleado.
      */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     /**
-     * Reemplaza la lista de empleados por una nueva.
+     * Cambia si el empleado estuvo presente o no.
      *
-     * @param empleados nueva lista de empleados.
+     * @param presente true si asistió, false si no.
      */
-    public void setEmpleados(ArrayList<Empleado> empleados) {
-        this.empleados = new ArrayList<>(empleados);
+    public void setPresente(boolean presente) {
+        this.presente = presente;
     }
 
     /**
-     * Retorna un resumen del departamento con su nombre
-     * y el total de empleados que tiene.
+     * Cambia si el empleado fue marcado como tarde.
      *
-     * @return resumen en texto.
+     * @param tarde true si llegó tarde, false si fue puntual.
+     */
+    public void setTarde(boolean tarde) {
+        this.tarde = tarde;
+    }
+
+    /**
+     * Cambia la hora de llegada registrada.
+     *
+     * @param llegada nueva hora de llegada.
+     */
+    public void setLlegada(LocalTime llegada) {
+        this.llegada = llegada;
+    }
+
+    /**
+     * Devuelve un resumen de la asistencia, incluyendo el nombre del empleado,
+     * si estuvo ausente, puntual o llegó tarde, y la hora de llegada.
+     *
+     * @return resumen en texto de la asistencia.
      */
     @Override
     public String toString() {
-        return "Departamento: " + nombre + " || Total de empleados: " + empleados.size();
+        String estado;
+        if (!presente) {
+            estado = "Ausente";
+        } else if (tarde) {
+            estado = "Tarde";
+        } else {
+            estado = "Puntual";
+        }
+
+        return "Asistencia{Empleado: " + empleado.getNombre() + ", Estado: " + estado + ", Hora llegada: " + llegada + "}";
     }
 }
