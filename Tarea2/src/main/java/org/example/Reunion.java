@@ -2,29 +2,67 @@ package org.example;
 
 import java.time.Instant;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class Reunion {
-    protected Date fecha;
-    protected Instant horaInicio;
-    protected Instant horaFinal;
-    protected Instant horaPrevista;
-    protected Duration duracionPrevista;
-    protected ArrayList<Empleado> Asistentes;
-    protected ArrayList<Empleado> Ausentes;
+    private Date fecha;
+    private Instant horaInicio;
+    private Instant horaFinal;
+    private Instant horaPrevista;
+    private Duration duracionPrevista;
+    private ArrayList<Empleado> Asistentes;
+    private ArrayList<Empleado> Ausentes;
+    private ArrayList<Empleado> invitados;
+    private ArrayList<Empleado> Retrasos;
+    private TipoReunion tipo;
+    private Empleado organizador;
 
-    protected Reunion(Date fecha, Duration duracionPrevista){
+    public Reunion(Date fecha, Duration duracionPrevista, Empleado organizador, TipoReunion tipo){
         this.fecha = fecha;
         this.duracionPrevista = duracionPrevista;
+        this.tipo = tipo;
+        this.organizador = organizador;
+        this.Asistentes = new ArrayList<>();
+        this.Retrasos = new ArrayList<>();
+        this.invitados = new ArrayList<>();
     }
 
-    public ArrayList<Empleado> getAsitencia(){
+    public void registrarInvitados(Empleado empleado) {
+        invitados.add(empleado);
+    }
+
+    public void registrarAsistencia(Empleado empleado, LocalTime horaLlegada, LocalTime horaInicioReunion) {
+        Asistencia asistencia = new Asistencia(empleado, horaLlegada, horaInicioReunion);
+
+        if(asistencia.getPresente() == true) {
+            if(asistencia.getTipoAsistencia()) {
+                Retrasos.add(empleado);
+            }
+
+            Asistentes.add(empleado);
+        }
+    }
+
+    public ArrayList<Empleado> obtenerAsistencias(){
         return new ArrayList<Empleado>(Asistentes);
     }
 
-    public ArrayList<Empleado> getAusentes(){
-        return new ArrayList<Empleado>(Ausentes);
+    public ArrayList<Empleado> obtenerAusencias(){
+        Ausentes = new ArrayList<>();
+
+        for(Empleado invitado: invitados) {
+            if(!Asistentes.contains(invitado)) {
+                Ausentes.add(invitado);
+            }
+        }
+
+        return Ausentes;
+    }
+
+    public ArrayList<Empleado> obtenerRetrasos(){
+        return new ArrayList<Empleado>(Retrasos);
     }
 
 
