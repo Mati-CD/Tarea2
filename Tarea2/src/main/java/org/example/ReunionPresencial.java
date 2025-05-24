@@ -1,18 +1,15 @@
 package org.example;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReunionPresencial extends Reunion {
     private String sala;
 
-    public ReunionPresencial(Empleado organizador,tipoReunion tipo, Date fecha,LocalDateTime horaPrevista, Duration duracionPrevista, String sala) {
-        super(organizador, tipo, fecha, horaPrevista, duracionPrevista);
-        this.sala = sala;
+    public ReunionPresencial(Date fecha, Empleado organizador, tipoReunion tipo) {
+        super(fecha, organizador, tipo);
     }
 
-    @Override
+
     public String getLugar() {
         return "Sala: " + sala;
     }
@@ -24,5 +21,10 @@ public class ReunionPresencial extends Reunion {
 
     public void setSala(String sala) {
         this.sala = sala;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Modalidad: Presencial";
     }
 }
