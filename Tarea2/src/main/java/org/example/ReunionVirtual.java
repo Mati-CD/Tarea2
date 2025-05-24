@@ -1,18 +1,15 @@
 package org.example;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class ReunionVirtual extends Reunion {
     private String enlace;
 
-    public ReunionVirtual(Empleado organizador,tipoReunion tipo,Date fecha,LocalDateTime horaPrevista,Duration duracionPrevista,String enlace) {
-        super(organizador, tipo, fecha, horaPrevista, duracionPrevista);
+    public ReunionVirtual(Date fecha, Empleado organizador, tipoReunion tipo) {
+        super(fecha, organizador, tipo);
         this.enlace = enlace;
     }
 
-    @Override
     public String getLugar() {
         return "Enlace virtual: " + enlace;
     }
